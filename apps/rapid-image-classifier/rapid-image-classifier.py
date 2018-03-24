@@ -19,9 +19,20 @@ import skimage.transform
 
 import mvnc.mvncapi as mvnc
 
+<<<<<<< HEAD
 # Max number of images to process. 
 # Avoid exhausting the memory with 1000s of images
 MAX_IMAGE_COUNT		= 200
+=======
+# User modifiable input parameters
+NCAPPZOO_PATH           = '../..' 
+GRAPH_PATH              = NCAPPZOO_PATH + '/tensorflow/mobilenets/graph'
+IMAGE_PATH              = NCAPPZOO_PATH + '/data/images'
+CATEGORIES_PATH         = NCAPPZOO_PATH + '/tensorflow/mobilenets/categories.txt'
+IMAGE_MEAN              = numpy.float16( 127.5 )
+IMAGE_STDDEV            = ( 1 / 127.5 )
+IMAGE_DIM               = ( 224, 224 )
+>>>>>>> dogsvscats/master
 
 # Variable to store commandline arguments
 ARGS                = None
@@ -64,8 +75,13 @@ def pre_process_image():
     print( "\n\nPre-processing images..." )
 
     # Create a list of all files in current directory & sub-directories
+<<<<<<< HEAD
     img_paths = [ y for x in os.walk( ARGS.image ) 
                   for y in glob.glob( os.path.join( x[0], '*.jpg' ) ) ]
+=======
+    file_list = [ y for x in os.walk( IMAGE_PATH ) 
+                  for y in glob( os.path.join( x[0], '*.jpg' ) ) ]
+>>>>>>> dogsvscats/master
 
     # Sort file names in alphabetical order
     img_paths.sort()
@@ -98,7 +114,11 @@ def infer_image( graph, img_list, img_paths ):
 
     # Load the labels file 
     labels =[ line.rstrip('\n') for line in 
+<<<<<<< HEAD
                    open( ARGS.labels ) if line != 'classes\n'] 
+=======
+                   open( CATEGORIES_PATH ) if line != 'classes\n'] 
+>>>>>>> dogsvscats/master
 
     print( "\n==============================================================" )
     for img_index, img in enumerate( img_list ):

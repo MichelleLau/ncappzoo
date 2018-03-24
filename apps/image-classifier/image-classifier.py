@@ -17,11 +17,22 @@ import skimage.transform
 
 import mvnc.mvncapi as mvnc
 
+<<<<<<< HEAD
 # Number of top prodictions to print
 NUM_PREDICTIONS		= 5
 
 # Variable to store commandline arguments
 ARGS                = None
+=======
+# User modifiable input parameters
+NCAPPZOO_PATH           = '../..'
+GRAPH_PATH              = NCAPPZOO_PATH + '/caffe/GoogLeNet/graph'
+IMAGE_PATH              = NCAPPZOO_PATH + '/data/images/cat.jpg'
+CATEGORIES_PATH         = NCAPPZOO_PATH + '/data/ilsvrc12/synset_words.txt'
+IMAGE_MEAN              = numpy.float16( [104.00698793, 116.66876762, 122.67891434] )
+IMAGE_STDDEV            = ( 1 )
+IMAGE_DIM               = ( 224, 224 )
+>>>>>>> dogsvscats/master
 
 # ---- Step 1: Open the enumerated device and get a handle to it -------------
 
@@ -56,6 +67,7 @@ def load_graph( device ):
 
 def pre_process_image():
 
+<<<<<<< HEAD
     # Read & resize image [Image size is defined during training]
     img = skimage.io.imread( ARGS.image )
     img = skimage.transform.resize( img, ARGS.dim, preserve_range=True )
@@ -69,6 +81,14 @@ def pre_process_image():
     img = ( img - numpy.float16( ARGS.mean ) ) * ARGS.scale
 
     return img
+=======
+# Mean subtraction & scaling [A common technique used to center the data]
+img = img.astype( numpy.float16 )
+img = ( img - IMAGE_MEAN ) * IMAGE_STDDEV
+
+# Load the image as a half-precision floating point array
+graph.LoadTensor( img, 'user object' )
+>>>>>>> dogsvscats/master
 
 # ---- Step 4: Read & print inference results from the NCS -------------------
 
@@ -86,14 +106,32 @@ def infer_image( graph, img ):
     # Load the image as a half-precision floating point array
     graph.LoadTensor( img, 'user object' )
 
+<<<<<<< HEAD
     # Get the results from NCS
     output, userobj = graph.GetResult()
+=======
+# Read all categories into a list
+categories = [line.rstrip('\n') for line in
+              open( CATEGORIES_PATH ) if line != 'classes\n']
+>>>>>>> dogsvscats/master
 
     # Sort the indices of top predictions
     order = output.argsort()[::-1][:NUM_PREDICTIONS]
 
+<<<<<<< HEAD
     # Get execution time
     inference_time = graph.GetGraphOption( mvnc.GraphOption.TIME_TAKEN )
+=======
+# Get execution time
+inference_time = graph.GetGraphOption( mvnc.GraphOption.TIME_TAKEN )
+
+for i in range( 0, 4 ):
+    print( "Prediction for "
+            + ": " + categories[order[i]]
+            + " with %3.1f%% confidence"
+            % (100.0 * output[order[i]] )
+            + " in %.2f ms" % ( numpy.sum( inference_time ) ) )
+>>>>>>> dogsvscats/master
 
     # Print the results
     print( "\n==============================================================" )
